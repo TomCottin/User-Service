@@ -1,0 +1,20 @@
+spring:
+    # Info de la BDD
+    datasource:
+        url: jdbc:postgresql://localhost:5432/userservice
+        username: postgres
+        password: root
+    jpa:
+        hibernate:
+            # Cree la BDD postgres a chaque lancement
+            ddl-auto: create
+        properties:
+           hibernate:
+            # Type de la BDD
+            dialect: org.hibernate.dialect.PostgreSQLDialect
+            '[format_sql]': true
+        # Permet d'afficher les requetes SQL dans la console 
+        show-sql: true
+server:
+    error:
+        include-message: always
