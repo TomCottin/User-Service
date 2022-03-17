@@ -14,7 +14,7 @@ spring:
             dialect: org.hibernate.dialect.PostgreSQLDialect
             '[format_sql]': true
         # Permet d'afficher les requetes SQL dans la console 
-        show-sql: true
+        show-sql: false
 server:
     error:
         include-message: always
