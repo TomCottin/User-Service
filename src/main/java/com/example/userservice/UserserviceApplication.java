@@ -4,12 +4,14 @@ import java.util.ArrayList;
 
 import com.example.userservice.domain.AppUser;
 import com.example.userservice.domain.Role;
-import com.example.userservice.service.IAppUserService;
+import com.example.userservice.service.AppUserService;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class UserserviceApplication {
@@ -19,7 +21,12 @@ public class UserserviceApplication {
 	}
 
 	@Bean
-    CommandLineRunner commandLineRunner(IAppUserService appUserService) {
+	PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+    CommandLineRunner commandLineRunner(AppUserService appUserService) {
         return args -> { 
 			appUserService.saveRole(new Role(null, "ROLE_USER"));
 			appUserService.saveRole(new Role(null, "ROLE_MANAGER"));

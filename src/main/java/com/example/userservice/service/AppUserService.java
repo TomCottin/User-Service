@@ -5,7 +5,7 @@ import java.util.List;
 import com.example.userservice.domain.AppUser;
 import com.example.userservice.domain.Role;
 
-public interface IAppUserService {
+public interface AppUserService {
 
     List<AppUser> getAllAppUsers();
     AppUser getAppUser(String username);

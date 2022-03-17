@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.example.userservice.domain.AppUser;
 import com.example.userservice.domain.Role;
-import com.example.userservice.service.IAppUserService;
+import com.example.userservice.service.AppUserService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,33 +25,33 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/v1")
 public class AppUserController {
 
-    private final IAppUserService AppUserService;
+    private final AppUserService appUserService;
 
     @GetMapping(path = "/users")
     public ResponseEntity<List<AppUser>> getUsers() {
-        return ResponseEntity.ok().body(AppUserService.getAllAppUsers());
+        return ResponseEntity.ok().body(appUserService.getAllAppUsers());
     }
 
     @GetMapping(path = "/user/{username}")
     public ResponseEntity<AppUser> getUser(@PathVariable("username") String username) {
-        return ResponseEntity.ok().body(AppUserService.getAppUser(username));
+        return ResponseEntity.ok().body(appUserService.getAppUser(username));
     }
 
     @PostMapping(path = "/user/save")
     public ResponseEntity<AppUser> saveUser(@RequestBody AppUser appUser) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/user/save").toUriString());
-        return ResponseEntity.created(uri).body(AppUserService.saveAppUser(appUser));
+        return ResponseEntity.created(uri).body(appUserService.saveAppUser(appUser));
     }
 
     @PostMapping(path = "/role/save")
     public ResponseEntity<Role> saveRole(@RequestBody Role role) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/role/save").toUriString());
-        return ResponseEntity.created(uri).body(AppUserService.saveRole(role));
+        return ResponseEntity.created(uri).body(appUserService.saveRole(role));
     }
 
     @PostMapping(path = "/role/addtouser")
     public ResponseEntity<?> saveRole(@RequestBody RoleToUserForm form) {
-        AppUserService.addRoleToAppUser(form.getUsername(), form.getRoleName());
+        appUserService.addRoleToAppUser(form.getUsername(), form.getRoleName());
         return ResponseEntity.ok().build();
     }
 }

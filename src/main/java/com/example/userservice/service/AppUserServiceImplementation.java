@@ -1,5 +1,7 @@
 package com.example.userservice.service;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -9,6 +11,11 @@ import com.example.userservice.domain.Role;
 import com.example.userservice.repository.AppUserRepository;
 import com.example.userservice.repository.RoleRepository;
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -19,11 +26,28 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class AppUserServiceImplementation implements IAppUserService {
+public class AppUserServiceImplementation implements AppUserService, UserDetailsService {
 
     // Warning : do not forget the final
     private final AppUserRepository appUserRepository;
     private final RoleRepository roleRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        AppUser appUser = appUserRepository.findByUsername(username);
+        if(appUser == null) {
+            log.error("User not found in the daatabase");
+            throw new UsernameNotFoundException("User not found in the database");
+        }
+        else {
+            log.info("User found in the database : {}", username);
+        }
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+            appUser.getRoles().forEach(role -> {
+                authorities.add(new SimpleGrantedAuthority(role.getName()));
+            });
+        return new User(appUser.getUsername(), appUser.getPassword(), authorities);
+    }
 
     @Override
     public List<AppUser> getAllAppUsers() {
@@ -58,6 +82,5 @@ public class AppUserServiceImplementation implements IAppUserService {
         Role role = roleRepository.findByName(roleName);
         // We add the new role to the existing appUser collection of roles
         appUser.getRoles().add(role);
-    }
-    
+    }    
 }
