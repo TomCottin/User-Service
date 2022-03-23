@@ -37,17 +37,16 @@ public class AppUserServiceImplementation implements AppUserService, UserDetails
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AppUser appUser = appUserRepository.findByUsername(username);
-        if(appUser == null) {
+        if (appUser == null) {
             log.error("User not found in the database");
             throw new UsernameNotFoundException("User not found in the database");
-        }
-        else {
+        } else {
             log.info("User found in the database : {}", username);
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-            appUser.getRoles().forEach(role -> {
-                authorities.add(new SimpleGrantedAuthority(role.getName()));
-            });
+        appUser.getRoles().forEach(role -> {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        });
         return new User(appUser.getUsername(), appUser.getPassword(), authorities);
     }
 
@@ -85,5 +84,5 @@ public class AppUserServiceImplementation implements AppUserService, UserDetails
         Role role = roleRepository.findByName(roleName);
         // We add the new role to the existing appUser collection of roles
         appUser.getRoles().add(role);
-    }    
+    }
 }

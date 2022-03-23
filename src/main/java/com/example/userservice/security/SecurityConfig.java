@@ -36,15 +36,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // In this function the order of the lines matter
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(
+                authenticationManagerBean());
         customAuthenticationFilter.setFilterProcessesUrl("/api/v1/login");
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         // Line below needs to be first
         http.authorizeRequests().antMatchers("/api/v1/login/**").permitAll(); // Anyone can access this ressource
         // Then set the who can access what
-        http.authorizeRequests().antMatchers(GET, "/api/v1/users/**").hasAnyAuthority("ROLE_USER"); // Only app users with ROLE_USER can access this ressource
-        http.authorizeRequests().antMatchers(POST, "/api/v1/user/save/**").hasAnyAuthority("ROLE_ADMIN"); // Only app users with ROLE_ADMIN can access this ressource
+        // Only app users with ROLE_USER can access this ressource
+        http.authorizeRequests().antMatchers(GET, "/api/v1/users/**").hasAnyAuthority("ROLE_USER");
+        // Only app users with ROLE_ADMIN can access this ressource
+        http.authorizeRequests().antMatchers(POST, "/api/v1/user/save/**").hasAnyAuthority("ROLE_ADMIN");
         // Finally everyone needs to be authenticated to make a request
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthenticationFilter);

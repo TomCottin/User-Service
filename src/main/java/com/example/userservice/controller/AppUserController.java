@@ -39,13 +39,15 @@ public class AppUserController {
 
     @PostMapping(path = "/user/save")
     public ResponseEntity<AppUser> saveUser(@RequestBody AppUser appUser) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/user/save").toUriString());
+        URI uri = URI
+                .create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/user/save").toUriString());
         return ResponseEntity.created(uri).body(appUserService.saveAppUser(appUser));
     }
 
     @PostMapping(path = "/role/save")
     public ResponseEntity<Role> saveRole(@RequestBody Role role) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/role/save").toUriString());
+        URI uri = URI
+                .create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/role/save").toUriString());
         return ResponseEntity.created(uri).body(appUserService.saveRole(role));
     }
 

@@ -32,14 +32,15 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        
-        if(request.getServletPath().equals("/api/v1/login")) {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
+        if (request.getServletPath().equals("/api/v1/login")) {
             filterChain.doFilter(request, response);
         } else {
             String authorizationHeader = request.getHeader(AUTHORIZATION);
-            if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-                
+            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+
                 try {
                     String token = authorizationHeader.substring("Bearer ".length());
                     // "secret" needs to be the same has in CustomAuthentificationFilter
@@ -52,7 +53,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     for (String role : roles) {
                         authorities.add(new SimpleGrantedAuthority(role));
                     }
-                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, authorities);
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                            username, authorities);
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     filterChain.doFilter(request, response);
                 } catch (Exception e) {
@@ -68,4 +70,5 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
             }
         }
-}}
+    }
+}

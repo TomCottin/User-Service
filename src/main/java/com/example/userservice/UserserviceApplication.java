@@ -26,8 +26,8 @@ public class UserserviceApplication {
 	}
 
 	@Bean
-    CommandLineRunner commandLineRunner(AppUserService appUserService) {
-        return args -> { 
+	CommandLineRunner commandLineRunner(AppUserService appUserService) {
+		return args -> {
 			appUserService.saveRole(new Role(null, "ROLE_USER"));
 			appUserService.saveRole(new Role(null, "ROLE_MANAGER"));
 			appUserService.saveRole(new Role(null, "ROLE_ADMIN"));

@@ -1,10 +1,11 @@
 package com.example.userservice.domain;
 
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.GenerationType.AUTO;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static javax.persistence.FetchType.EAGER;
-import static javax.persistence.GenerationType.AUTO;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
